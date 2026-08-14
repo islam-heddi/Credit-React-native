@@ -2,15 +2,13 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 export default function Register(){
+    const route = useRouter()
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const route =useRouter()
 
     const submitData = () : unknown => {
         if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
         if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
-        if(password !== confirmPassword) return Alert.alert("Error","The confirm password does not match");
         Alert.alert("Success",`Yay! submitted ${username}`);
     }
 
@@ -25,15 +23,16 @@ export default function Register(){
                 <TextInput placeholder="Enter your username" value={username} onChangeText={(e) => setUsername(e)} />
                 <Text>Password:</Text>
                 <TextInput secureTextEntry={true} placeholder="Enter your password" value={password} onChangeText={(e) => setPassword(e)} />
-                <Text>Confirm your password:</Text>
-                <TextInput secureTextEntry={true} placeholder="Confirm your password" value={confirmPassword} onChangeText={(e) => setConfirmPassword(e)}/>
                 <View style={{
                     flex: 1,
                     gap: 16
                 }}>
-                <Button title="Register" onPress={() => submitData()} />
-                <Button title="Sign in" onPress={() => route.push("/login")} />
+
+                <Button title="Login" onPress={() => submitData()} />
+                <Button title="New Account" onPress={() => route.push("/register")} />
+
                 </View>
+                
             </View>
         </ScrollView>
     )
