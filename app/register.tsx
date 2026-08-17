@@ -1,7 +1,7 @@
 import { UserModel } from "@/model/User";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 export default function Register(){
     const db: SQLiteDatabase = useSQLiteContext()
@@ -9,19 +9,22 @@ export default function Register(){
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const route =useRouter()
+    const [loading, startTransition] = useTransition()
 
     const submitData = async () : Promise<unknown> => {
-        try {
-            if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
-            if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
-            if(password !== confirmPassword) return Alert.alert("Error","The confirm password does not match");
-            
-            const userModel = UserModel.getInstance(db);
-            await userModel.addUser(username, password);
-            Alert.alert("Success",`Yay! submitted ${username}`);
-        } catch (error) {
-            Alert.alert("Error", `Cannot register ${error}`)
-        }
+        if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
+        if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
+        if(password !== confirmPassword) return Alert.alert("Error","The confirm password does not match");
+        startTransition(async () => {
+            try {
+                const userModel = UserModel.getInstance(db);
+                await userModel.addUser(username, password);
+                route.push("/money")
+                Alert.alert("Success",`Yay! submitted ${username}`);
+            } catch (error) {
+                Alert.alert("Error", `Cannot register ${error}`)
+            }
+        })
     }
 
     return(
@@ -41,7 +44,7 @@ export default function Register(){
                     flex: 1,
                     gap: 16
                 }}>
-                <Button title="Register" onPress={() => submitData()} />
+                <Button disabled={loading} title={loading? "Loading...": "Register"} onPress={() => submitData()} />
                 <Button title="Sign in" onPress={() => route.push("/login")} />
                 </View>
             </View>

@@ -1,8 +1,7 @@
 import { DataWithPagination } from "@/component/DataWithPagination";
 import type { IMoney } from "@/types/Money";
-import { Link } from "expo-router";
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 
 export default function Index() {
   const data: IMoney[] = [
@@ -90,9 +89,8 @@ export default function Index() {
   return (
     <ScrollView>
       <View>
+        <Button title="+ New Money" color={"black"} />
         <Text>You see your refunds below</Text>
-        <Link href={"/about"}>about</Link>
-        <Link href={"/register"}>register</Link>
         <View style={{
           margin: 20
         }}>
