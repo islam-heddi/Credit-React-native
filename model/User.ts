@@ -38,9 +38,9 @@ class UserModel{
     public  async findUser(id: string): Promise<IUser | unknown>{
         try {
             const db = this.db;
-            const user: IUser[][] = await db.getAllAsync<IUser[]>("SELECT * from users where id=?", [id]);
+            const user: IUser[] = await db.getAllAsync<IUser>("SELECT * from users where id=?", [id]);
 
-            return user[0][0];
+            return user[0];
         } catch (error) {
             return error;
         }
@@ -49,11 +49,11 @@ class UserModel{
     public async findUserPassword(username: string, password: string): Promise<IUser|unknown> {
         try {
             const db = this.db;
-            const user: IUser[][] = await db.getAllAsync<IUser[]>("SELECT * from users where username=?", [username]);
-            const check: boolean|undefined = await verifyPassword(password, user[0][0].password!);
+            const user: IUser[] = await db.getAllAsync<IUser>("SELECT * from users where username=?", [username]);
+            const check: boolean|undefined = await verifyPassword(password, user[0].password!);
             if(check === undefined) throw new Error("unable to check the password");
-            if(!check) throw new Error("the password is wrong");
-            return user[0][0];
+            if(!(check as boolean)) throw new Error("the password is wrong");
+            return user[0];
         } catch (error) {
             return error;
         }   
