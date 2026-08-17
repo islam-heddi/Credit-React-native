@@ -1,9 +1,12 @@
 import { UserModel } from "@/model/User";
+import { create } from "@/store/userSlice";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
+import { useDispatch } from "react-redux";
 export default function Register(){
+    const dispatch = useDispatch();
     const db: SQLiteDatabase = useSQLiteContext()
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -21,6 +24,10 @@ export default function Register(){
                 await userModel.addUser(username, password);
                 route.push("/money")
                 Alert.alert("Success",`Yay! submitted ${username}`);
+                dispatch(create({
+                    username,
+                    isAuthed: true
+                }));
             } catch (error) {
                 Alert.alert("Error", `Cannot register ${error}`)
             }

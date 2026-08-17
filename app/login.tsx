@@ -1,11 +1,14 @@
 import { UserModel } from "@/model/User";
+import { create } from "@/store/userSlice";
 import { IUser } from "@/types/User";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
+import { useDispatch } from "react-redux";
 
 export default function Register(){
+    const dispatch = useDispatch();
     const db: SQLiteDatabase = useSQLiteContext();
     const route = useRouter()
     const [username, setUsername] = useState<string>("");
@@ -22,7 +25,11 @@ export default function Register(){
                 if(!user) throw new Error(user as string);
                 route.push("/money")
                 Alert.alert("Success",`Yay! welcome back ${(user as IUser).username}`);
-    
+                dispatch(create({
+                    username: (user as IUser).username,
+                    id: (user as IUser).id,
+                    isAuthed: true
+                }));
             } catch (error) {
                 Alert.alert("Error", `${error}`);
             }
