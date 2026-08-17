@@ -1,17 +1,27 @@
+import { UserModel } from "@/model/User";
 import { useRouter } from "expo-router";
+import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 export default function Register(){
+    const db: SQLiteDatabase = useSQLiteContext()
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const route =useRouter()
 
-    const submitData = () : unknown => {
-        if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
-        if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
-        if(password !== confirmPassword) return Alert.alert("Error","The confirm password does not match");
-        Alert.alert("Success",`Yay! submitted ${username}`);
+    const submitData = async () : Promise<unknown> => {
+        try {
+            if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
+            if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
+            if(password !== confirmPassword) return Alert.alert("Error","The confirm password does not match");
+            
+            const userModel = UserModel.getInstance(db);
+            await userModel.addUser(username, password);
+            Alert.alert("Success",`Yay! submitted ${username}`);
+        } catch (error) {
+            Alert.alert("Error", `Cannot register ${error}`)
+        }
     }
 
     return(
