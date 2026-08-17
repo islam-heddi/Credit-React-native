@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
+
 export default function Register(){
     const db: SQLiteDatabase = useSQLiteContext();
     const route = useRouter()
@@ -14,14 +15,9 @@ export default function Register(){
         try {
             if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
             if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
-            
             const userModel = UserModel.getInstance(db);
-            
             const user: IUser|unknown = await userModel.findUserPassword(username, password);
-            console.log("Within the login")
-            console.log(user)
             if(!user) throw new Error(user as string);
-
             Alert.alert("Success",`Yay! welcome back ${(user as IUser).username}`);
         } catch (error) {
             Alert.alert("Error", `${error}`);
