@@ -18,7 +18,7 @@ class UserModel{
             PRAGMA journal_mode = WAL;
             CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
-            username TEXT NOT NULL, 
+            username TEXT NOT NULL UNIQUE, 
             password TEXT NOT NULL
             );
         `);
@@ -80,7 +80,7 @@ class UserModel{
             const check: boolean = await verifyPassword(password, (userExisted as IUser).password!) as boolean;
             if(!check) throw new Error("the password does not match"); 
             const db = this.db;
-            await db.runAsync("UPDATE users (username=$username) where id=$id ", {$username:username, $id: id});
+            await db.runAsync("UPDATE users SET (username=$username) where id=$id ", {$username:username, $id: id});
             return "updated successfully";
         } catch (error) {
             return error;
