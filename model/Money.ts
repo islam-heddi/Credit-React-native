@@ -1,5 +1,9 @@
 import { IMoney } from "@/types/Money";
 import { SQLiteDatabase } from "expo-sqlite";
+/**
+ * MoneyModel is a class that defines the business logic and the database sql exchanges,
+ * it uses the singleton pattern, so make sure to use getInstance() method instead of instanciating.
+ */
 class MoneyModel {
     
     private db!: SQLiteDatabase
@@ -27,7 +31,11 @@ class MoneyModel {
             );
         `);
     };
-
+    /**
+     * find all the list of money
+     * @param user_id 
+     * @returns Promise<IMoney[] | unknown>
+     */
     public async findMoney(user_id: number) {
         try {
             const money: IMoney[] = await this.db.getAllAsync<IMoney>("SELECT * from users where user_id=?", [user_id]);
@@ -36,7 +44,14 @@ class MoneyModel {
             return error;
         }
     }
-
+    /**
+     * create a new row of money
+     * @param db 
+     * @param user_id 
+     * @param fromPerson 
+     * @param amount 
+     * @returns Promise<string | unknown>
+     */
     public async addNewMoney(db: SQLiteDatabase, user_id: number,fromPerson: string, amount: number) {
         
         try {
@@ -47,7 +62,14 @@ class MoneyModel {
             return error;
         }
     }
-
+    /**
+     * update a money row
+     * @param db 
+     * @param id 
+     * @param fromPerson 
+     * @param amount 
+     * @returns Promise<string | unknown>
+     */
     public async updateMoney(db: SQLiteDatabase, id: number, fromPerson: string, amount: string){
         try {
             await db.runAsync("UPDATE money SET fromPerson=$fromPerson, amount=$amount where id=$id", {

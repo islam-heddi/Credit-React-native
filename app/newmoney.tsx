@@ -1,12 +1,24 @@
+import { MoneyModel } from "@/model/Money";
+import { useSQLiteContext } from "expo-sqlite";
 import { useState, useTransition } from "react";
-import { Button, ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 
 export default function NewMoney(){
+    const db = useSQLiteContext();
     const [name, setName] = useState<string>("");
     const [amount, setAmount] = useState<number>();
     const [loading, startTransition] = useTransition()
     const submitData = async () => {
-        // later
+        if(!name) return Alert.alert("Error", "name is missing");
+        if(!amount) return Alert.alert("Error", "amount is missing");
+        startTransition(async () => {
+            try {
+                const moneyModel = MoneyModel.getInstance(db);
+                
+            } catch (error) {
+                Alert.alert("Error", `${error}`)
+            }
+        })
     }
 
     return(
