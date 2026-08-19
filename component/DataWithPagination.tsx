@@ -5,7 +5,7 @@ import { numberOfPage, pagination } from "@/utils/pagination";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { Check, SquarePen, Trash2 } from "lucide-react-native";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
@@ -19,14 +19,21 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
   const route = useRouter();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [mdata, setMdata] = useState<IMoney[]>([])
+    const filteredData = useMemo(
+      () => data.filter(value => Boolean(value.isDone) === (doneFilter || false)),
+      [data, doneFilter]
+    );
+    const totalPages = numberOfPage(filteredData);
     useEffect(() => {
-      const totalPages = parseInt(numberOfPage(data).toString());
-      if (currentPage > totalPages && totalPages > 0) {
+      if (totalPages === 0) {
+        setCurrentPage(1);
+        setMdata([]);
+      } else if (currentPage > totalPages) {
         setCurrentPage(totalPages);
-      } else if(currentPage >= 1 && currentPage <= totalPages){
-        setMdata(pagination(currentPage, data))
+      } else if (currentPage >= 1 && currentPage <= totalPages) {
+        setMdata(pagination(currentPage, filteredData))
       }
-    },[currentPage, data]);
+    },[currentPage, filteredData, totalPages]);
 
     const makeItDone = async (id: number) => {
       try {
@@ -71,7 +78,7 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
     }
 
     return <>
-        {mdata.filter(value => value.isDone == (doneFilter||false)).map((value, index) => <Fragment key={index}>
+        {mdata.map((value, index) => <Fragment key={index}>
           <View style={{flex: 1,
               justifyContent: "space-between",
               flexDirection: "row",
@@ -133,9 +140,9 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
                 <Text style={{color: "white"}}><SquarePen /></Text>
               </Pressable>
                 </Fragment>
-                :<></> 
+                : <></>
               }
-              
+
               <Pressable onPress={() => deleteRowAlert(value.id as number)} style={{
                 backgroundColor: "#ff0202",
                 padding: 4,
@@ -152,7 +159,10 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
             flexDirection: "row",
             gap: 4
         }}>
-            <Pressable onPress={() => currentPage > 1 ? setCurrentPage(p => p-1): setCurrentPage(1)}>
+            <Pressable
+              disabled={totalPages === 0}
+              onPress={() => currentPage > 1 ? setCurrentPage(p => p-1): setCurrentPage(1)}
+            >
             <Text>&lt;&lt; Previous </Text>
             </Pressable>
             <Text style={{
@@ -160,9 +170,12 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
                 borderWidth: 1,
                 padding: 2,
                 margin: 2
-            }}>{currentPage}</Text>
-            <Text>/ {parseInt(numberOfPage(data).toString())}</Text>
-            <Pressable onPress={() => currentPage >= parseInt(numberOfPage(data).toString())? setCurrentPage(parseInt(numberOfPage(data).toString())): setCurrentPage(p => p+1)}>
+            }}>{totalPages === 0 ? 0 : currentPage}</Text>
+            <Text>/ {totalPages}</Text>
+            <Pressable
+              disabled={totalPages === 0}
+              onPress={() => currentPage >= totalPages ? setCurrentPage(totalPages): setCurrentPage(p => p+1)}
+            >
             <Text>Next &gt;&gt; </Text>
             </Pressable>
         </View>

@@ -11,8 +11,7 @@ const pagination = (page: number, table: IMoney[]) => {
 
 const numberOfPage = (table: IMoney[]): number => {
     const pageSize = 10;
-    const numberPages = table.length / pageSize;
-    return numberPages + table.length % pageSize;
+    return Math.ceil(table.length / pageSize);
 }
 
 
