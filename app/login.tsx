@@ -23,7 +23,7 @@ export default function Login(){
             try {
                 const userModel = UserModel.getInstance(db);
                 const user: IUser|unknown = await userModel.findUserPassword(username, password);
-                if(!user) throw new Error(user as string);
+                if(user instanceof Error) throw new Error(user.message);
                 route.push("/money")
                 Alert.alert("Success",`Yay! welcome back ${(user as IUser).username}`);
                 dispatch(create({

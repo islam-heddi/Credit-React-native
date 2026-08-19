@@ -1,4 +1,5 @@
 import { DataWithPagination } from "@/component/DataWithPagination";
+import TotalMoney from "@/component/TotalMoney";
 import { MoneyModel } from "@/model/Money";
 import { UserPayload } from "@/store/store";
 import type { IMoney } from "@/types/Money";
@@ -36,6 +37,7 @@ export default function Index() {
         <Button title="+ New Money" onPress={() => route.push("/newmoney")} color={"black"} />
           <Text style={{padding: 10}}>{user.id} / {user.username}</Text>
         <Text>You see your refunds below</Text>
+        <TotalMoney data={data} />
         <View style={{
           backgroundColor: "white",
           margin: 10
