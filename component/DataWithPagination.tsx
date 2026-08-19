@@ -1,11 +1,13 @@
 import type { IMoney } from "@/types/Money";
 import { numberOfPage, pagination } from "@/utils/pagination";
+import { useRouter } from "expo-router";
 import { Check, SquarePen, Trash2 } from "lucide-react-native";
 import React, { Fragment, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 export function DataWithPagination({data}: {
     data: IMoney[]
 }) {
+  const route = useRouter();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [mdata, setMdata] = useState<IMoney[]>([])
     useEffect(() => {
@@ -33,8 +35,19 @@ export function DataWithPagination({data}: {
                 flex: 0,
                 justifyContent: "center",
               }}>
+                <Pressable onPress={() => route.push({
+                  pathname:"/detail",
+                  params: {
+                    MoneyId: value.id,
+                    fromPerson: value.fromPerson,
+                    amount: value.amount,
+                    createDate: value.createDate,
+                    isDone: value.isDone? "true" : "false"
+                  }
+                })}>
                 <Text>{value.fromPerson}</Text>
                 <Text>in {value.createDate}</Text>
+                </Pressable>
               </View>
               <Text>{value.amount} DZ</Text>
             </View>
