@@ -66,7 +66,7 @@ export default function Detail() {
                     backgroundColor: "#ededed"
 
                 }}>
-                    <Text>Date</Text>
+                    <Text>Since</Text>
                     <Text>{createDate}</Text>
                 </View>
                 <View style={{
