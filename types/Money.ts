@@ -3,7 +3,7 @@ interface IMoney {
   amount: number;
   fromPerson: string; // name of that person
   isDone?: boolean;
-  createData?: Date;
+  createDate?: string;
 }
 
 export type {

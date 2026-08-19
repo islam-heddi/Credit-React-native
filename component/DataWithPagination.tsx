@@ -25,9 +25,16 @@ export function DataWithPagination({data}: {
               flex:1,
               justifyContent: "space-between",
               flexDirection: "row",
-              margin: 6
+              margin: 6,
+              alignItems: "center"
             }}>
-              <Text>{value.fromPerson}</Text>
+              <View style={{
+                flex: 0,
+                justifyContent: "center",
+              }}>
+                <Text>{value.fromPerson}</Text>
+                <Text>in {value.createDate}</Text>
+              </View>
               <Text>{value.amount} DZ</Text>
             </View>
             <View style={{
