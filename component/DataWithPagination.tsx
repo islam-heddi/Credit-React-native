@@ -63,7 +63,14 @@ export function DataWithPagination({data}: {
               }}>
                 <Text style={{color: "white"}}><Check /></Text>
               </Pressable>
-              <Pressable style={{
+              <Pressable onPress={() => route.push({
+                pathname: "/updateMoney",
+                params: {
+                  MoneyId: value.id,
+                  lName: value.fromPerson,
+                  lAmount: value.amount,
+                }
+              })} style={{
                 backgroundColor: "#89c8ff",
                 padding: 4,
               }}>
