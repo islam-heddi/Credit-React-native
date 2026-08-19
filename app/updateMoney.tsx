@@ -35,7 +35,8 @@ export default function UpdateMoney(){
         <View style={{
             flex: 1,
             flexDirection: "column",
-            margin: 10
+            margin: 10,
+            gap: 10
         }}>
             <NotepadText style={{alignSelf: "center"}} size={200}  />
             <Text style={{alignSelf: "center", fontSize: 30}}>Update</Text>
