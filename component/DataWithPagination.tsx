@@ -110,8 +110,9 @@ export function DataWithPagination({data, onDeleted, doneFilter}: {
               flexDirection: "row",
               gap: 3
             }}>
-              
-              <Pressable onPress={() => makeItDone(value.id as number)} style={{
+              {
+                !doneFilter? <Fragment>
+                    <Pressable onPress={() => makeItDone(value.id as number)} style={{
                 backgroundColor: "#b2ff89",
                 padding: 4,
               }}>
@@ -130,6 +131,10 @@ export function DataWithPagination({data, onDeleted, doneFilter}: {
               }}>
                 <Text style={{color: "white"}}><SquarePen /></Text>
               </Pressable>
+                </Fragment>
+                :<></> 
+              }
+              
               <Pressable onPress={() => deleteRowAlert(value.id as number)} style={{
                 backgroundColor: "#ff0202",
                 padding: 4,
