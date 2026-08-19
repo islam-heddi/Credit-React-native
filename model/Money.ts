@@ -38,7 +38,7 @@ class MoneyModel {
      */
     public async findMoney(user_id: number) {
         try {
-            const money: IMoney[] = await this.db.getAllAsync<IMoney>("SELECT * from users where user_id=?", [user_id]);
+            const money: IMoney[] = await this.db.getAllAsync<IMoney>("SELECT * from money where user_id=?", [user_id]);
             return money;
         } catch (error) {
             return error;
@@ -147,6 +147,14 @@ class MoneyModel {
         return this.instance;
     }
 
+    public async findALLMoney() {
+        try {
+            const money: IMoney[] = await this.db.getAllAsync<IMoney>("SELECT * from money");
+            return money;
+        } catch (error) {
+            return error;
+        }
+    }
 
     public getStatus(): boolean {
         return this.isConnected;
