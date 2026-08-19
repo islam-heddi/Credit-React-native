@@ -3,6 +3,7 @@ import { create } from "@/store/userSlice";
 import { IUser } from "@/types/User";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
+import { CircleUser } from "lucide-react-native";
 import { useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
@@ -39,10 +40,15 @@ export default function Register(){
 
     return(
         <ScrollView>
+            
             <View style={{
+                flex: 1,
+                flexDirection: "column",
                 margin: 10,
+                gap: 10,
                 padding: 10
             }}>
+                <CircleUser style={{alignSelf: "center"}} size={200}  />
                 <Text>Begin with completing your information below:</Text>
                 <Text>Username:</Text>
                 <TextInput placeholder="Enter your username" value={username} onChangeText={(e) => setUsername(e)} />
