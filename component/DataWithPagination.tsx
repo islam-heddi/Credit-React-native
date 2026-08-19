@@ -24,7 +24,19 @@ export function DataWithPagination({data, onDeleted}: {
       } else if(currentPage >= 1 && currentPage <= totalPages){
         setMdata(pagination(currentPage, data))
       }
-    },[currentPage, data])
+    },[currentPage, data]);
+
+    const makeItDone = async (id: number) => {
+      try {
+        const moneyModel = MoneyModel.getInstance(db);
+        await moneyModel.updateDoneToTrueMoney(id, user.id);
+        Alert.alert("Success", "You make it done.");
+        onDeleted(id); // NOTE: the onDeleted callback will delete the item from the list and its not from the database.
+      } catch (error) {
+        Alert.alert("Error", `${error}`)
+      }
+    }
+
 
     const deleteRowAlert =(id: number) => {
       if(!id) return Alert.alert("id not provided");
@@ -57,7 +69,7 @@ export function DataWithPagination({data, onDeleted}: {
     }
 
     return <>
-        {mdata.map((value, index) => <Fragment key={index}>
+        {mdata.filter(value => value.isDone == false).map((value, index) => <Fragment key={index}>
           <View style={{flex: 1,
               justifyContent: "space-between",
               flexDirection: "row",
@@ -98,7 +110,7 @@ export function DataWithPagination({data, onDeleted}: {
               gap: 3
             }}>
               
-              <Pressable style={{
+              <Pressable onPress={() => makeItDone(value.id as number)} style={{
                 backgroundColor: "#b2ff89",
                 padding: 4,
               }}>
