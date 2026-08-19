@@ -1,7 +1,23 @@
 import userReducer from "@/store/userSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { configureStore } from "@reduxjs/toolkit";
+import {
+    persistReducer,
+    persistStore,
+} from "redux-persist";
 
-type UserPayload = {
+
+const persistConfig = {
+  key: "root",
+  storage: AsyncStorage,
+};
+
+const persistedReducer = persistReducer(
+  persistConfig,
+  userReducer
+);
+
+export type UserPayload = {
     user: {
         value: {
             id: number,
@@ -11,30 +27,18 @@ type UserPayload = {
     }
 }
 
-const loadState: () => UserPayload = () => {
-  try {
-    const serialized = localStorage.getItem("reduxState");
-    return serialized ? JSON.parse(serialized) : undefined;
-  } catch (e) {
-    return undefined;
-  }
-};
-const saveState = (state: any) => {
-  try {
-    const serialized = JSON.stringify(state);
-    localStorage.setItem("reduxState", serialized);
-    } catch (e) {
-        console.error("Could not save state", e);
-    return undefined;
-    }
-}
-const preloadedState = loadState()
 export const store = configureStore({
     reducer: {
-        user: userReducer
+        user: persistedReducer,
     },
-    preloadedState
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+       },
+    })
 });
-store.subscribe(() => {
-    saveState(store.getState())
-})
+
+
+export const persistor = persistStore(store);
+
+export type RootState = ReturnType<typeof store.getState>;
