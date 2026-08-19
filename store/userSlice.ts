@@ -15,7 +15,7 @@ const userSlice = createSlice({
             state.value.username = action.payload.username;
             state.value.isAuthed = true;
         },
-        clear: (state, _action) => {
+        clear: (state) => {
             state.value.id = -1;
             state.value.username = "";
             state.value.isAuthed = false;

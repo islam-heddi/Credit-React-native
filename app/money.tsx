@@ -2,13 +2,15 @@ import { DataWithPagination } from "@/component/DataWithPagination";
 import TotalMoney from "@/component/TotalMoney";
 import { MoneyModel } from "@/model/Money";
 import { UserPayload } from "@/store/store";
+import { clear } from "@/store/userSlice";
 import type { IMoney } from "@/types/Money";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
+import { DoorOpen } from "lucide-react-native";
 import React, { Fragment, useEffect, useState, useTransition } from "react";
-import { Alert, Button, ScrollView, Text, View } from "react-native";
+import { Alert, Button, Pressable, ScrollView, Text, View } from "react-native";
 import RNPickerSelect from 'react-native-picker-select';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 export default function Index() {
@@ -18,7 +20,7 @@ export default function Index() {
   const route = useRouter()
   const [data, setData] = useState<IMoney[]>([]);
   const [filterDone, setFilterDone] = useState<boolean>(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     startTranstion(async () => {
       try {
@@ -34,9 +36,34 @@ export default function Index() {
   return (
     <ScrollView>
       <View>
+        <View style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          margin: 10,
+          alignItems: "center"
+        }}>
+        <Text style={{padding: 10}}>{user.id} / {user.username}</Text>
+        <Pressable style={{
+          flex: 0,
+          flexDirection: "row",
+          gap: 10,
+          alignItems: "center",
+          margin: 10
+        }} onPress={() => {
+          route.push("/login")
+          dispatch(clear())
+        }}>
+          <DoorOpen color={"red"}/>
+          <Text style={{color:"red"}}>Exit</Text>
+        </Pressable>
+        </View>
+        <View style={{
+          margin: 10
+        }}>
         <Button title="+ New Money" onPress={() => route.push("/newmoney")} color={"black"} />
-          <Text style={{padding: 10}}>{user.id} / {user.username}</Text>
         <Text>You see your refunds below</Text>
+        </View>
         <TotalMoney data={data} />
         <View style={{
           backgroundColor: "white",
