@@ -67,6 +67,9 @@ export default function Index() {
                               setData((currentData) => currentData.filter((money) => money.id !== deletedId));
                             }}
                             doneFilter={filterDone}
+                            onDone={(doneId) => {
+                              setData((currentData) => currentData.map((money) => money.id === doneId ? { ...money, isDone: true } : money));
+                            }}
                           />
                         }
           </Fragment> 

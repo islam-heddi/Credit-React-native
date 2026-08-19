@@ -8,10 +8,11 @@ import { Check, SquarePen, Trash2 } from "lucide-react-native";
 import React, { Fragment, useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { useSelector } from "react-redux";
-export function DataWithPagination({data, onDeleted, doneFilter}: {
+export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
   data: IMoney[];
   onDeleted: (id: number) => void;
   doneFilter?: boolean;
+  onDone: (id: number) => void;
 }) {
   const user = useSelector((state: UserPayload) => state.user.value);
   const db = useSQLiteContext();
@@ -32,7 +33,7 @@ export function DataWithPagination({data, onDeleted, doneFilter}: {
         const moneyModel = MoneyModel.getInstance(db);
         await moneyModel.updateDoneToTrueMoney(id, user.id);
         Alert.alert("Success", "You make it done.");
-        onDeleted(id); // NOTE: the onDeleted callback will delete the item from the list and its not from the database.
+        onDone(id); // NOTE: the onDone callback will update the item in the list and its not from the database.
       } catch (error) {
         Alert.alert("Error", `${error}`)
       }
