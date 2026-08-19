@@ -6,7 +6,9 @@ import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { Fragment, useEffect, useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, View } from "react-native";
+import RNPickerSelect from 'react-native-picker-select';
 import { useSelector } from "react-redux";
+
 
 export default function Index() {
   const db = useSQLiteContext();
@@ -14,6 +16,7 @@ export default function Index() {
   const [loading, startTranstion] = useTransition();
   const route = useRouter()
   const [data, setData] = useState<IMoney[]>([]);
+  const [filterDone, setFilterDone] = useState<boolean>(false);
 
   useEffect(() => {
     startTranstion(async () => {
@@ -34,6 +37,19 @@ export default function Index() {
           <Text style={{padding: 10}}>{user.id} / {user.username}</Text>
         <Text>You see your refunds below</Text>
         <View style={{
+          backgroundColor: "white",
+          margin: 10
+        }}>
+          <RNPickerSelect
+              onValueChange={(value) => setFilterDone(value)}
+              items={[
+                { label: 'done', value: true },
+                { label: 'not done', value: false },
+              ]}
+              placeholder={{ label: 'Select your purpose...', value: false }}
+          />
+        </View>
+        <View style={{
           margin: 20
         }}>
           {loading? <Text>"Please wait..."</Text>:<Fragment>
@@ -50,6 +66,7 @@ export default function Index() {
                             onDeleted={(deletedId) => {
                               setData((currentData) => currentData.filter((money) => money.id !== deletedId));
                             }}
+                            doneFilter={filterDone}
                           />
                         }
           </Fragment> 

@@ -8,9 +8,10 @@ import { Check, SquarePen, Trash2 } from "lucide-react-native";
 import React, { Fragment, useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { useSelector } from "react-redux";
-export function DataWithPagination({data, onDeleted}: {
+export function DataWithPagination({data, onDeleted, doneFilter}: {
   data: IMoney[];
   onDeleted: (id: number) => void;
+  doneFilter?: boolean;
 }) {
   const user = useSelector((state: UserPayload) => state.user.value);
   const db = useSQLiteContext();
@@ -69,7 +70,7 @@ export function DataWithPagination({data, onDeleted}: {
     }
 
     return <>
-        {mdata.filter(value => value.isDone == false).map((value, index) => <Fragment key={index}>
+        {mdata.filter(value => value.isDone == (doneFilter||false)).map((value, index) => <Fragment key={index}>
           <View style={{flex: 1,
               justifyContent: "space-between",
               flexDirection: "row",
