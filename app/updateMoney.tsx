@@ -2,6 +2,7 @@ import { MoneyModel } from "@/model/Money";
 import { UserPayload } from "@/store/store";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
+import { NotepadText } from "lucide-react-native";
 import { useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -31,8 +32,13 @@ export default function UpdateMoney(){
 
     return(
     <ScrollView>
-        <View>
-            <Text>Update</Text>
+        <View style={{
+            flex: 1,
+            flexDirection: "column",
+            margin: 10
+        }}>
+            <NotepadText style={{alignSelf: "center"}} size={200}  />
+            <Text style={{alignSelf: "center", fontSize: 30}}>Update</Text>
             <Text>Name</Text>
             <TextInput value={name} onChangeText={(e) => setName(e)} placeholder="from who ? type the name" />
             <Text>Amount $</Text>
