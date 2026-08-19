@@ -45,7 +45,12 @@ export default function Index() {
                             </Text>
                           </View>
                         </Fragment> : 
-                          <DataWithPagination data={data} />
+                          <DataWithPagination
+                            data={data}
+                            onDeleted={(deletedId) => {
+                              setData((currentData) => currentData.filter((money) => money.id !== deletedId));
+                            }}
+                          />
                         }
           </Fragment> 
           }

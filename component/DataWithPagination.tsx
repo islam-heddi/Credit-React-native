@@ -1,20 +1,61 @@
+import { MoneyModel } from "@/model/Money";
+import { UserPayload } from "@/store/store";
 import type { IMoney } from "@/types/Money";
 import { numberOfPage, pagination } from "@/utils/pagination";
 import { useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 import { Check, SquarePen, Trash2 } from "lucide-react-native";
 import React, { Fragment, useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
-export function DataWithPagination({data}: {
-    data: IMoney[]
+import { Alert, Pressable, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+export function DataWithPagination({data, onDeleted}: {
+  data: IMoney[];
+  onDeleted: (id: number) => void;
 }) {
+  const user = useSelector((state: UserPayload) => state.user.value);
+  const db = useSQLiteContext();
   const route = useRouter();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [mdata, setMdata] = useState<IMoney[]>([])
     useEffect(() => {
-      if(currentPage >= 1 && currentPage <= parseInt(numberOfPage(data).toString())){
+      const totalPages = parseInt(numberOfPage(data).toString());
+      if (currentPage > totalPages && totalPages > 0) {
+        setCurrentPage(totalPages);
+      } else if(currentPage >= 1 && currentPage <= totalPages){
         setMdata(pagination(currentPage, data))
       }
-    },[currentPage])
+    },[currentPage, data])
+
+    const deleteRowAlert =(id: number) => {
+      if(!id) return Alert.alert("id not provided");
+        Alert.alert(
+        "Confirm Action",                 // Title of the dialog box
+        "Are you sure you want to delete?", // Description message
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("User canceled"),
+            style: "cancel"               // iOS styling layout hint
+          },
+          { 
+            text: "Confirm", 
+            onPress: async () => {
+              try {
+                  const moneyModel = MoneyModel.getInstance(db);
+                  await moneyModel.deleteMoney(id, user.id)
+                  onDeleted(id);
+                  Alert.alert("Success", "You have been deleted successfully.");
+                } catch (error) {
+                 Alert.alert("Error", "Error while deleting try again.")
+              }
+            },
+            style: "default"              // Can also use 'destructive' for delete actions
+          }
+        ],
+        { cancelable: true }              // Allows Android users to dismiss by clicking outside
+      );
+    }
+
     return <>
         {mdata.map((value, index) => <Fragment key={index}>
           <View style={{flex: 1,
@@ -76,7 +117,7 @@ export function DataWithPagination({data}: {
               }}>
                 <Text style={{color: "white"}}><SquarePen /></Text>
               </Pressable>
-              <Pressable style={{
+              <Pressable onPress={() => deleteRowAlert(value.id as number)} style={{
                 backgroundColor: "#ff0202",
                 padding: 4,
               }}>
