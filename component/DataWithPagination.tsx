@@ -19,7 +19,8 @@ export function DataWithPagination({data}: {
               justifyContent: "space-between",
               flexDirection: "row",
               alignItems: "center",
-              margin: 3
+              padding: 3,
+              backgroundColor: index%2? "#fff": "#ededed"
           }}>
             <View style={{
               flex:1,
