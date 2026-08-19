@@ -24,12 +24,14 @@ class UserModel{
         `);
     }
 
-    public async addUser(username: string,  password: string): Promise<unknown>{
+    public async addUser(username: string,  password: string): Promise<IUser | unknown>{
         try {
             const hashedPassword: string| undefined = await hashPassword(password);
             if(hashPassword === undefined) throw new Error("unable to hash the password");
             const db = this.db;
             await db.runAsync("INSERT INTO users(username, password) values (?,?)", [username, hashedPassword as string]);
+            const findThatUser: IUser = await this.findUserPassword(username, password) as IUser;
+            return findThatUser;
         } catch (error) {
             return error;
         }

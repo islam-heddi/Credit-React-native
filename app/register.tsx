@@ -1,8 +1,9 @@
 import { UserModel } from "@/model/User";
 import { create } from "@/store/userSlice";
+import { IUser } from "@/types/User";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 export default function Register(){
@@ -12,26 +13,28 @@ export default function Register(){
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const route =useRouter()
-    const [loading, startTransition] = useTransition()
+    const [loading, setLoading] = useState(false)
 
-    const submitData = async () : Promise<unknown> => {
+    const submitData = async () : Promise<void> => {
         if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
         if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
         if(password !== confirmPassword) return Alert.alert("Error","The confirm password does not match");
-        startTransition(async () => {
-            try {
-                const userModel = UserModel.getInstance(db);
-                await userModel.addUser(username, password);
-                route.push("/money")
-                Alert.alert("Success",`Yay! submitted ${username}`);
-                dispatch(create({
-                    username,
-                    isAuthed: true
-                }));
-            } catch (error) {
-                Alert.alert("Error", `Cannot register ${error}`)
-            }
-        })
+        setLoading(true);
+        try {
+            const userModel = UserModel.getInstance(db);
+            const user = await userModel.addUser(username, password) as IUser;
+            route.push("/money")
+            Alert.alert("Success",`Yay! submitted ${username}`);
+            dispatch(create({
+                id: user.id,
+                username,
+                isAuthed: true
+            }));
+        } catch (error) {
+            Alert.alert("Error", `Cannot register ${error}`)
+        } finally {
+            setLoading(false);
+        }
     }
 
     return(
