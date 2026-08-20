@@ -22,6 +22,12 @@ export default function Index() {
   const [filterDone, setFilterDone] = useState<boolean>(false);
   const dispatch = useDispatch();
   useEffect(() => {
+        if(!user.isAuthed){
+            route.push("/");
+            Alert.alert("Error", "Please authenticate");
+        }
+    },[user]);
+  useEffect(() => {
     startTranstion(async () => {
       try {
         const moneyModel = MoneyModel.getInstance(db);

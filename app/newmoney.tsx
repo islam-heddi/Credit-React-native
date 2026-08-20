@@ -3,13 +3,18 @@ import { UserPayload } from "@/store/store";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { NotepadText } from "lucide-react-native";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
-
 export default function NewMoney(){
     const db = useSQLiteContext();
-    const user = useSelector((state: UserPayload) => state.user.value)
+    const user = useSelector((state: UserPayload) => state.user.value);
+    useEffect(() => {
+            if(!user.isAuthed){
+                route.push("/");
+                Alert.alert("Error", "Please authenticate");
+            }
+        },[user]);
     const [name, setName] = useState<string>("");
     const [amount, setAmount] = useState<number>();
     const [loading, startTransition] = useTransition();
