@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "MyMoney",
-    "slug": "MyMoney",
+    "name": "Credit",
+    "slug": "Credit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "mymoney",
+    "icon": "./assets/images/coin-icon.png",
+    "scheme": "credit",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
