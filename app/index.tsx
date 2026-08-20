@@ -1,8 +1,16 @@
-import { useRouter } from "expo-router";
-import React from "react";
+import { UserPayload } from "@/store/store";
+import { useRouter, useSegments } from "expo-router";
+import React, { useEffect } from "react";
 import { Button, Image, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 export default function Index() {
-  const route = useRouter()
+  const user = useSelector((state: UserPayload)=> state.user.value);
+  const route = useRouter();
+  useEffect(() => {
+    if(user.isAuthed){
+      route.push("/money");
+    }
+  },[user])
   return (
     <View  style={{ 
       flex: 1,

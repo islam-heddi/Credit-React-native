@@ -1,8 +1,18 @@
-import { useLocalSearchParams } from "expo-router";
+import { UserPayload } from "@/store/store";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { HandCoins } from "lucide-react-native";
-import { ScrollView, Text, View } from "react-native";
-
+import { useEffect } from "react";
+import { Alert, ScrollView, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 export default function Detail() {
+    const route = useRouter();
+    const user = useSelector((state: UserPayload) => state.user.value);
+    useEffect(() => {
+        if(!user.isAuthed){
+            route.push("/");
+            Alert.alert("Error", "Please authenticate");
+        }
+    },[user]);
     const {MoneyId,
         fromPerson,
         amount,

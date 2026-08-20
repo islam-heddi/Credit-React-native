@@ -6,16 +6,22 @@ import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { Key } from "lucide-react-native";
 import { useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { UserPayload } from "@/store/store";
 export default function Login(){
+    const user = useSelector((state: UserPayload) => state.user.value);
     const dispatch = useDispatch();
     const db: SQLiteDatabase = useSQLiteContext();
     const route = useRouter()
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [loading, startTransition] = useTransition();
-
+    useEffect(() => {
+        if(user.isAuthed){
+            route.push("/money");
+        }
+    },[user]);
     const submitData = async () : Promise<unknown> => {
         if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
         if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");

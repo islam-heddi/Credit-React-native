@@ -1,7 +1,16 @@
-import { Text, View } from "react-native"
-
+import { UserPayload } from "@/store/store";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
+import { Text, View } from "react-native";
+import { useSelector } from "react-redux";
 export default function About(){
-
+    const user = useSelector((state: UserPayload) => state.user.value);
+    const route = useRouter();
+    useEffect(() => {
+        if(user.isAuthed){
+            route.push("/money");
+        }
+    },[user]);
     return (
         <View>
             <Text style={{fontSize: 20}}>About Credit app</Text>

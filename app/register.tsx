@@ -1,13 +1,15 @@
 import { UserModel } from "@/model/User";
+import { UserPayload } from "@/store/store";
 import { create } from "@/store/userSlice";
 import { IUser } from "@/types/User";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { CircleUser } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 export default function Register(){
+    const user = useSelector((state: UserPayload) => state.user.value);
     const dispatch = useDispatch();
     const db: SQLiteDatabase = useSQLiteContext()
     const [username, setUsername] = useState<string>("");
@@ -15,7 +17,11 @@ export default function Register(){
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const route =useRouter()
     const [loading, setLoading] = useState(false)
-
+    useEffect(() => {
+        if(user.isAuthed){
+            route.push("/money");
+        }
+    },[user]);
     const submitData = async () : Promise<void> => {
         if(username.length < 4) return Alert.alert("Error","Username must be atleast 4 letters");
         if(password.length < 4) return Alert.alert("Error","Password must be atleast 4 letters");
