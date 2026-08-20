@@ -6,7 +6,7 @@ import { clear } from "@/store/userSlice";
 import type { IMoney } from "@/types/Money";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { CheckCircle2, Clock3, DoorOpen, Plus } from "lucide-react-native";
+import { CheckCircle2, Clock3, DoorOpen, Plus, SettingsIcon } from "lucide-react-native";
 import React, { Fragment, useEffect, useState, useTransition } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,6 +49,16 @@ export default function Index() {
             <Text style={{ color: "#718482", fontSize: 13, fontWeight: "700", letterSpacing: 0.3 }}>YOUR MONEY</Text>
             <Text style={{ color: "#102a2a", fontSize: 28, fontWeight: "800", marginTop: 5 }}>Hello, {user.username}</Text>
           </View>
+          <Pressable
+            accessibilityLabel="Settings"
+            accessibilityRole="button"
+            onPress={() => {
+              route.push("/private/Settings");
+            }}
+            style={{ alignItems: "center", backgroundColor: "#ffffff", borderColor: "#d8e6e1", borderRadius: 13, borderWidth: 1, padding: 11 }}
+          >
+            <SettingsIcon color="#6d760f" size={20} />
+          </Pressable>
           <Pressable
             accessibilityLabel="Sign out"
             accessibilityRole="button"

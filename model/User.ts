@@ -52,6 +52,7 @@ class UserModel{
         try {
             const db = this.db;
             const user: IUser[] = await db.getAllAsync<IUser>("SELECT * from users where username=?", [username]);
+            if(user.length < 1) throw new Error("username is not available.");
             const check: boolean|undefined = await verifyPassword(password, user[0].password!);
             if(check === undefined) throw new Error("unable to check the password");
             if(!(check as boolean)) throw new Error("the password is wrong");
@@ -82,7 +83,7 @@ class UserModel{
             const check: boolean = await verifyPassword(password, (userExisted as IUser).password!) as boolean;
             if(!check) throw new Error("the password does not match"); 
             const db = this.db;
-            await db.runAsync("UPDATE users SET (username=$username) where id=$id ", {$username:username, $id: id});
+            await db.runAsync("UPDATE users SET username=$username where id=$id ", {$username:username, $id: id});
             return "updated successfully";
         } catch (error) {
             return error;
@@ -99,7 +100,7 @@ class UserModel{
             const newHashedPassword: string| undefined = await hashPassword(newPassword) as string;
             if(hashPassword === undefined) throw new Error("unable to hash the password, try later");
 
-            await db.runAsync("UPDATE users (password=$password) where id=$id ", {$password: newHashedPassword, $id: id});
+            await db.runAsync("UPDATE users SET password=$password where id=$id ", {$password: newHashedPassword, $id: id});
             return "updated successfully";
         } catch (error) {
             return error;
