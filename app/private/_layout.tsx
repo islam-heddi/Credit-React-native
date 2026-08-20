@@ -10,6 +10,7 @@ export default function RootLayout() {
         <Stack.Screen name="money" options={{ headerShown: false }}/>
         <Stack.Screen name="newmoney" options={{ headerShown: false }}/>
         <Stack.Screen name="updateMoney" options={{ headerShown: false }} />
+        <Stack.Screen name="Settings" options={{ headerShown: false }} />
     </Stack.Protected>
   </Stack>;
 }
