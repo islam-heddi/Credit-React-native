@@ -89,4 +89,4 @@ This app stores data locally on the device, which makes it suitable for quick pe
 
 ## Credit
 
-Created by Islam Hedi.
+Created by Islam Heddi in 2026.
