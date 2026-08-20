@@ -19,7 +19,7 @@ export default function Register(){
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         if(user.isAuthed){
-            route.push("/money");
+            route.push("/private/money");
         }
     },[user]);
     const submitData = async () : Promise<void> => {
@@ -30,7 +30,7 @@ export default function Register(){
         try {
             const userModel = UserModel.getInstance(db);
             const user = await userModel.addUser(username, password) as IUser;
-            route.push("/money")
+            route.push("/private/money")
             Alert.alert("Success",`Yay! submitted ${username}`);
             dispatch(create({
                 id: user.id,

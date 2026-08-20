@@ -1,5 +1,5 @@
 import { UserPayload } from "@/store/store";
-import { useRouter, useSegments } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
 import { Button, Image, Text, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -8,7 +8,7 @@ export default function Index() {
   const route = useRouter();
   useEffect(() => {
     if(user.isAuthed){
-      route.push("/money");
+      route.push("/private/money");
     }
   },[user])
   return (
@@ -27,7 +27,7 @@ export default function Index() {
         }} />
         <Text>Welcome to Credit, an application for managing your finances.</Text>
         <Text>if you sold someone on credit then this app for you to track it.</Text>
-        <Button title="Start" onPress={() => route.push("/register")} />      
+        <Button title="Start" onPress={() => route.push("/login")} />      
       </View>
   );
 }

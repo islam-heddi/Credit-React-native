@@ -98,7 +98,7 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
                 justifyContent: "center",
               }}>
                 <Pressable onPress={() => route.push({
-                  pathname:"/detail",
+                  pathname:"/private/detail",
                   params: {
                     MoneyId: value.id,
                     fromPerson: value.fromPerson,
@@ -127,7 +127,7 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
                 <Text style={{color: "white"}}><Check /></Text>
               </Pressable>
               <Pressable onPress={() => route.push({
-                pathname: "/updateMoney",
+                pathname: "/private/updateMoney",
                 params: {
                   MoneyId: value.id,
                   lName: value.fromPerson,

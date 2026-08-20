@@ -1,14 +1,13 @@
 import { UserModel } from "@/model/User";
+import { UserPayload } from "@/store/store";
 import { create } from "@/store/userSlice";
 import { IUser } from "@/types/User";
 import { useRouter } from "expo-router";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { Key } from "lucide-react-native";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { UserPayload } from "@/store/store";
 export default function Login(){
     const user = useSelector((state: UserPayload) => state.user.value);
     const dispatch = useDispatch();
@@ -19,7 +18,7 @@ export default function Login(){
     const [loading, startTransition] = useTransition();
     useEffect(() => {
         if(user.isAuthed){
-            route.push("/money");
+            route.push("/private/money");
         }
     },[user]);
     const submitData = async () : Promise<unknown> => {
@@ -30,7 +29,7 @@ export default function Login(){
                 const userModel = UserModel.getInstance(db);
                 const user: IUser|unknown = await userModel.findUserPassword(username, password);
                 if(user instanceof Error) throw new Error(user.message);
-                route.push("/money")
+                route.push("/private/money")
                 Alert.alert("Success",`Yay! welcome back ${(user as IUser).username}`);
                 dispatch(create({
                     username: (user as IUser).username,

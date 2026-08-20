@@ -10,11 +10,10 @@ export default function NewMoney(){
     const db = useSQLiteContext();
     const user = useSelector((state: UserPayload) => state.user.value);
     useEffect(() => {
-            if(!user.isAuthed){
-                route.push("/");
-                Alert.alert("Error", "Please authenticate");
-            }
-        },[user]);
+        if(!user.isAuthed){
+            route.push("/");
+        }
+    },[user]);
     const [name, setName] = useState<string>("");
     const [amount, setAmount] = useState<number>();
     const [loading, startTransition] = useTransition();
@@ -27,7 +26,7 @@ export default function NewMoney(){
                 const moneyModel = MoneyModel.getInstance(db);
                 await moneyModel.addNewMoney(db, user.id, name, amount);
                 Alert.alert("Success","successfully added");
-                route.push("/money")
+                route.push("/private/money")
             } catch (error) {
                 Alert.alert("Error", `${error}`)
             }
