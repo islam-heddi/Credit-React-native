@@ -23,8 +23,8 @@ The project is designed for personal money tracking, making it easy to follow wh
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/islam-heddi/MyMoney-React-native.git
-cd MyMoney-React-native
+git clone https://github.com/islam-heddi/Credit-React-native.git
+cd Credit-React-native
 ```
 
 ### 2. Install dependencies
