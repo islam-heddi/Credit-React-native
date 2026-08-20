@@ -1,4 +1,6 @@
-# Credit-React-native
+# Credit mobile app
+
+<img src="./assets/1.png" />
 
 Credit is a mobile application built with React Native and Expo for tracking money that people owe you. It helps users manage their lending records, monitor repayment status, and keep financial information organized in one place.
 
