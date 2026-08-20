@@ -28,7 +28,7 @@ export default function UpdateMoney(){
                 const moneyModel = MoneyModel.getInstance(db);
                 await moneyModel.updateMoney(db,parseInt(MoneyId as string), name, amount);
                 Alert.alert("Success","successfully updated");
-                route.push("/money")
+                route.push("/private/money")
             } catch (error) {
                 Alert.alert("Error", `${error}`)
             }

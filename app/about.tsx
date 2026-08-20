@@ -8,7 +8,7 @@ export default function About(){
     const route = useRouter();
     useEffect(() => {
         if(user.isAuthed){
-            route.push("/money");
+            route.push("/private/money");
         }
     },[user]);
     return (

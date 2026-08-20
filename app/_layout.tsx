@@ -8,7 +8,13 @@ export default function RootLayout() {
   return <SQLiteProvider databaseName="money.db">
     <Provider store={store}>
       <PersistGate  loading={null} persistor={persistor}>
-        <Stack />
+        <Stack>
+          <Stack.Screen name="index"  options={{ headerShown: false }} />
+          <Stack.Screen name="login"  />
+          <Stack.Screen name="about"  />
+          <Stack.Screen name="register" />
+          <Stack.Screen name="private" options={{ headerShown: false }} />
+        </Stack>
       </PersistGate>
     </Provider>
   </SQLiteProvider>;

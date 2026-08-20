@@ -67,7 +67,7 @@ export default function Index() {
         <View style={{
           margin: 10
         }}>
-        <Button title="+ New Money" onPress={() => route.push("/newmoney")} color={"black"} />
+        <Button title="+ New Money" onPress={() => route.push("/private/newmoney")} color={"black"} />
         <Text>You see your refunds below</Text>
         </View>
         <TotalMoney data={data} />
