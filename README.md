@@ -1,52 +1,90 @@
-# MyMoney-React-native
-a mobile application for saving your money using react native
-# Welcome to your Expo app 👋
+# Credit-React-native
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Credit is a mobile application built with React Native and Expo for tracking money that people owe you. It helps users manage their lending records, monitor repayment status, and keep financial information organized in one place.
 
-## Get started
+## Application description
 
-1. Install dependencies
+The app includes:
 
-   ```bash
-   npm install
-   ```
+- User registration and login
+- Personal dashboard for managing money records
+- Add, update, and delete debt/credit entries
+- Status tracking for open and completed repayments
+- Overview totals for financial summaries
+- Settings page and logout flow
+- Local data storage for privacy and offline access
 
-2. Start the app
+The project is designed for personal money tracking, making it easy to follow who owes what and keep repayment history organized.
 
-   ```bash
-   npx expo start
-   ```
+## Installation
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Clone the repository
 
 ```bash
-npm run reset-project
+git clone https://github.com/islam-heddi/MyMoney-React-native.git
+cd MyMoney-React-native
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Install dependencies
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Run the app
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+You can then open the app in:
 
-Join our community of developers creating universal apps.
+- Android emulator
+- iOS simulator
+- Expo Go on a mobile device
+- Web browser using Expo web support
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Useful commands
+
+```bash
+npm run android
+npm run ios
+npm run web
+npm run lint
+```
+
+## Technology stack
+
+This project uses the following technologies:
+
+- React Native
+- Expo
+- TypeScript
+- Expo Router
+- Redux Toolkit
+- Redux Persist
+- AsyncStorage
+- SQLite via expo-sqlite
+- React Navigation
+- bcryptjs for password hashing
+- lucide-react-native for icons
+
+## Project structure
+
+- app/ - main application screens and routes
+- component/ - reusable UI components
+- store/ - Redux store and slices
+- model/ - database and business logic models
+- types/ - TypeScript interfaces
+- utils/ - helper functions and utilities
+- assets/ - images and static resources
+
+## Notes
+
+This app stores data locally on the device, which makes it suitable for quick personal finance management without a backend service.
+
+
+
+## Credit
+
+Created by Islam Hedi.
