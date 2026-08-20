@@ -4,7 +4,7 @@ import type { IMoney } from "@/types/Money";
 import { numberOfPage, pagination } from "@/utils/pagination";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { Check, SquarePen, Trash2 } from "lucide-react-native";
+import { ArrowLeft, ArrowRight, Check, SquarePen, Trash2 } from "lucide-react-native";
 import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -66,7 +66,7 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
                   await moneyModel.deleteMoney(id, user.id)
                   onDeleted(id);
                   Alert.alert("Success", "You have been deleted successfully.");
-                } catch (error) {
+                } catch {
                  Alert.alert("Error", "Error while deleting try again.")
               }
             },
@@ -78,105 +78,71 @@ export function DataWithPagination({data, onDeleted, doneFilter, onDone}: {
     }
 
     return <>
-        {mdata.map((value, index) => <Fragment key={index}>
-          <View style={{flex: 1,
-              justifyContent: "space-between",
-              flexDirection: "row",
-              alignItems: "center",
-              padding: 3,
-              backgroundColor: index%2? "#fff": "#ededed"
-          }}>
-            <View style={{
-              flex:1,
-              justifyContent: "space-between",
-              flexDirection: "row",
-              margin: 6,
-              alignItems: "center"
-            }}>
-              <View style={{
-                flex: 0,
-                justifyContent: "center",
-              }}>
-                <Pressable onPress={() => route.push({
+        <View style={{ gap: 10 }}>
+        {mdata.map((value, index) => <Fragment key={value.id ?? index}>
+          <View style={{ backgroundColor: "#ffffff", borderColor: "#edf3f1", borderRadius: 14, borderWidth: 1, flexDirection: "row", overflow: "hidden" }}>
+            <View style={{ backgroundColor: Boolean(value.isDone) ? "#0f766e" : "#f0b429", width: 5 }} />
+            <View style={{ flex: 1, padding: 13 }}>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => route.push({
                   pathname:"/private/detail",
                   params: {
                     MoneyId: value.id,
                     fromPerson: value.fromPerson,
                     amount: value.amount,
                     createDate: value.createDate,
-                    isDone: value.isDone? "true" : "false"
+                    isDone: Boolean(value.isDone) ? "true" : "false"
                   }
-                })}>
-                <Text>{value.fromPerson}</Text>
-                <Text>in {value.createDate}</Text>
-                </Pressable>
+                })}
+              >
+                <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text style={{ color: "#102a2a", flex: 1, fontSize: 16, fontWeight: "800" }}>{value.fromPerson}</Text>
+                  <Text style={{ color: "#102a2a", fontSize: 16, fontWeight: "800" }}>{value.amount} DZ</Text>
+                </View>
+                <Text style={{ color: "#718482", fontSize: 13, marginTop: 5 }}>{value.createDate}</Text>
+              </Pressable>
+              <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-between", marginTop: 12 }}>
+                <Text style={{ color: Boolean(value.isDone) ? "#0f766e" : "#a16207", fontSize: 12, fontWeight: "800" }}>
+                  {Boolean(value.isDone) ? "COMPLETED" : "OPEN"}
+                </Text>
+                <View style={{ flexDirection: "row", gap: 8 }}>
+                  {!doneFilter && <>
+                    <Pressable accessibilityLabel="Mark as completed" accessibilityRole="button" onPress={() => makeItDone(value.id as number)} style={{ backgroundColor: "#e6f6f1", borderRadius: 9, padding: 8 }}>
+                      <Check color="#0f766e" size={17} strokeWidth={2.5} />
+                    </Pressable>
+                    <Pressable accessibilityLabel="Edit loan" accessibilityRole="button" onPress={() => route.push({ pathname: "/private/updateMoney", params: { MoneyId: value.id, lName: value.fromPerson, lAmount: value.amount } })} style={{ backgroundColor: "#edf4ff", borderRadius: 9, padding: 8 }}>
+                      <SquarePen color="#2563eb" size={17} />
+                    </Pressable>
+                  </>}
+                  <Pressable accessibilityLabel="Delete loan" accessibilityRole="button" onPress={() => deleteRowAlert(value.id as number)} style={{ backgroundColor: "#fff0f0", borderRadius: 9, padding: 8 }}>
+                    <Trash2 color="#dc2626" size={17} />
+                  </Pressable>
+                </View>
               </View>
-              <Text>{value.amount} DZ</Text>
-            </View>
-            <View style={{
-              flex: 0,
-              flexDirection: "row",
-              gap: 3
-            }}>
-              {
-                !doneFilter? <Fragment>
-                    <Pressable onPress={() => makeItDone(value.id as number)} style={{
-                backgroundColor: "#b2ff89",
-                padding: 4,
-              }}>
-                <Text style={{color: "white"}}><Check /></Text>
-              </Pressable>
-              <Pressable onPress={() => route.push({
-                pathname: "/private/updateMoney",
-                params: {
-                  MoneyId: value.id,
-                  lName: value.fromPerson,
-                  lAmount: value.amount,
-                }
-              })} style={{
-                backgroundColor: "#89c8ff",
-                padding: 4,
-              }}>
-                <Text style={{color: "white"}}><SquarePen /></Text>
-              </Pressable>
-                </Fragment>
-                : <></>
-              }
-
-              <Pressable onPress={() => deleteRowAlert(value.id as number)} style={{
-                backgroundColor: "#ff0202",
-                padding: 4,
-              }}>
-                <Text style={{color: "white"}}><Trash2 /></Text>
-              </Pressable>
             </View>
           </View>
         </Fragment>)}
-        <View style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row",
-            gap: 4
-        }}>
+        </View>
+        <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "center", marginTop: 18 }}>
             <Pressable
-              disabled={totalPages === 0}
-              onPress={() => currentPage > 1 ? setCurrentPage(p => p-1): setCurrentPage(1)}
+              accessibilityLabel="Previous page"
+              accessibilityRole="button"
+              disabled={totalPages === 0 || currentPage === 1}
+              onPress={() => currentPage > 1 && setCurrentPage(p => p - 1)}
+              style={{ alignItems: "center", backgroundColor: totalPages === 0 || currentPage === 1 ? "#edf3f1" : "#e6f6f1", borderRadius: 10, padding: 9 }}
             >
-            <Text>&lt;&lt; Previous </Text>
+              <ArrowLeft color={totalPages === 0 || currentPage === 1 ? "#a5b5b1" : "#0f766e"} size={18} />
             </Pressable>
-            <Text style={{
-                borderColor: "black",
-                borderWidth: 1,
-                padding: 2,
-                margin: 2
-            }}>{totalPages === 0 ? 0 : currentPage}</Text>
-            <Text>/ {totalPages}</Text>
+            <Text style={{ color: "#718482", fontSize: 13, fontWeight: "700", marginHorizontal: 14 }}>{totalPages === 0 ? 0 : currentPage} / {totalPages}</Text>
             <Pressable
-              disabled={totalPages === 0}
-              onPress={() => currentPage >= totalPages ? setCurrentPage(totalPages): setCurrentPage(p => p+1)}
+              accessibilityLabel="Next page"
+              accessibilityRole="button"
+              disabled={totalPages === 0 || currentPage === totalPages}
+              onPress={() => currentPage < totalPages && setCurrentPage(p => p + 1)}
+              style={{ alignItems: "center", backgroundColor: totalPages === 0 || currentPage === totalPages ? "#edf3f1" : "#e6f6f1", borderRadius: 10, padding: 9 }}
             >
-            <Text>Next &gt;&gt; </Text>
+              <ArrowRight color={totalPages === 0 || currentPage === totalPages ? "#a5b5b1" : "#0f766e"} size={18} />
             </Pressable>
         </View>
     </>
